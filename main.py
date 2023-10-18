@@ -22,7 +22,8 @@ def db_init():
         )
     ''')
     connection.commit()
-    connection.close
+    connection.close # without this connection close getting threading issues, objects created in a thread can only be used in the same thread.
+    
 
 db_init()
 
