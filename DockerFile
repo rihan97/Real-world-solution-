@@ -7,6 +7,11 @@ WORKDIR /app
 # cp contents into app
 COPY . /app
 
-# install packages inside the requirements file
-RUN pip install -r requirements.txt 
+# install packages inside the requirements file added safety to download from py server
+RUN pip install --trusted-host pypi.python.org -r requirements.txt 
 
+# use port 80
+EXPOSE 80
+
+# Run it
+CMD ["python", "main.py"]
