@@ -1,0 +1,3 @@
+#  setting base image
+FROM python:38-slim
+
