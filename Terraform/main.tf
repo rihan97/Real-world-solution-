@@ -203,12 +203,12 @@ POLICY
 # attach iam policy to the required iam role above
 resource "aws_iam_role_policy_attachment" "dev-AmazonEKSClusterPolicy" {
     policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-    role = aws_iam_role.demo.name
+    role = aws_iam_role.dev.name
 }
 
 
 # eks cluster config 
-resource "aws_eks_cluster" "demo" {
+resource "aws_eks_cluster" "dev" {
     name = "dev"
     role_arn = aws_iam_role.dev.arn //role created for eks
 
