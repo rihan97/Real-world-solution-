@@ -184,7 +184,7 @@ resource "aws_iam_role" "dev" {
     name = "eks-cluster-dev"
     
     assume_role_policy = <<POLICY
-}
+{
 
     "Version": "2012-10-17",
     "Statement": [
@@ -214,10 +214,10 @@ resource "aws_eks_cluster" "dev" {
 
     vpc_config {
         subnet_ids = [  //subnets for eks to create nodes & lb
-            aws_subnet.aws_subnet.private-eu-west-1a.id,
-            aws_subnet.aws_subnet.private-eu-west-1b.id,
-            aws_subnet.aws_subnet.public-eu-west-1a.id,
-            aws_subnet.aws_subnet.public-eu-west-1b.id,
+            aws_subnet.private-eu-west-1a.id,
+            aws_subnet.private-eu-west-1b.id,
+            aws_subnet.public-eu-west-1a.id,
+            aws_subnet.public-eu-west-1b.id
         ]
     }
 
