@@ -221,7 +221,7 @@ resource "aws_eks_cluster" "dev" {
         ]
     }
 
-    depends_on = [aws_iam_role.policy_attachment.dev-AmazonEKSClusterPolicy] //until iam role ready eks cluster wont be created
+    depends_on = [aws_iam_role_policy_attachment.dev-AmazonEKSClusterPolicy] //until iam role ready eks cluster wont be created
 }
 
 
