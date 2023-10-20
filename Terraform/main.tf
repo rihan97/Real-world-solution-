@@ -62,7 +62,7 @@ resource "aws_subnet" "public-eu-west-1a" {
 }
 
 # second public subnet 
-resource "aws_subnet" "public-eu-west-1a" {
+resource "aws_subnet" "public-eu-west-1b" {
     vpc_id = aws_vpc.main.id
     cidr_block = "10.0.96.0/19"
     availability_zone = "eu-west-1b"
