@@ -21,26 +21,26 @@ resource "aws_internet_gateway" "igw" {
 
 
 # 4 subnets to meet eks requirements 2 public 2 private in diff az each one 8k ip add
-resource "aws_subnet" "private-eu-west-1a" {
+resource "aws_subnet" "private-us-east-1a" {
     vpc_id = aws_vpc.main.id
     cidr_block = "10.0.0.0/19"
-    availability_zone = "eu-west-1a"
+    availability_zone = "us-east-1a"
 
     tags = {
-        "name" = "private-eu-west-1a"
+        "name" = "private-us-east-1a"
         "kubernetes.io/role/internal-elb" = "1" //needed for k8s to discover subnets whre private lb will be created
         "kubernetes.io/cluster/dev" = "owend" //eks cluster name owned meaning used only for k8s
     }
 }
 
 # second one private subnet - last ip in the frist subnet is 10.0.31.255 hence starts wtih .32
-resource "aws_subnet" "private-eu-west-1b" {
+resource "aws_subnet" "private-us-east-1b" {
     vpc_id = aws_vpc.main.id
     cidr_block = "10.0.32.0/19"
-    availability_zone = "eu-west-1b"
+    availability_zone = "us-east-1b"
 
     tags = {
-        "name" = "private-eu-west-1b"
+        "name" = "private-us-east-1b"
         "kubernetes.io/role/internal-elb" = "1" //needed for k8s to discover subnets whre private lb will be created
         "kubernetes.io/cluster/dev" = "owend" //eks cluster name owned meaning used only for k8s
     }
@@ -48,28 +48,28 @@ resource "aws_subnet" "private-eu-west-1b" {
 
 
 # first public subnet 
-resource "aws_subnet" "public-eu-west-1a" {
+resource "aws_subnet" "public-us-east-1a" {
     vpc_id = aws_vpc.main.id
     cidr_block = "10.0.64.0/19"
-    availability_zone = "eu-west-1a"
+    availability_zone = "us-east-1a"
     map_public_ip_on_launch = true // needed if you want to create public k8s instace groups worker will get public ip
 
     tags = {
-        "name" = "public-eu-west-1a"
+        "name" = "public-us-east-1a"
         "kubernetes.io/role/internal-elb" = "1" //needed for k8s to discover subnets whre private lb will be created
         "kubernetes.io/cluster/dev" = "owend" //eks cluster name owned meaning used only for k8s
     }
 }
 
 # second public subnet 
-resource "aws_subnet" "public-eu-west-1b" {
+resource "aws_subnet" "public-us-east-1b" {
     vpc_id = aws_vpc.main.id
     cidr_block = "10.0.96.0/19"
-    availability_zone = "eu-west-1b"
+    availability_zone = "us-east-1b"
     map_public_ip_on_launch = true //most times use private subnets for instance groups & create public lb in public subnets
 
     tags = {
-        "name" = "public-eu-west-1b"
+        "name" = "public-us-east-1b"
         "kubernetes.io/role/internal-elb" = "1" 
         "kubernetes.io/cluster/dev" = "owend" 
     }
@@ -87,7 +87,7 @@ resource "aws_eip" "nat" {
 # first allocate a public ip for nat gw
 resource "aws_nat_gateway" "nat" {
     allocation_id = aws_eip.nat.id 
-    subnet_id = aws_subnet.public-eu-west-1a.id //place it inside the public subnet - ig as default route
+    subnet_id = aws_subnet.public-us-east-1a.id //place it inside the public subnet - ig as default route
 
     tags = {
         name = "nat"
@@ -155,25 +155,25 @@ resource "aws_route_table" "public" {
 }
 
 # To associate all 4 subnets with route table
-resource "aws_route_table_association" "private-eu-west-1a" {
-    subnet_id = aws_subnet.private-eu-west-1a.id
+resource "aws_route_table_association" "private-us-east-1a" {
+    subnet_id = aws_subnet.private-us-east-1a.id
     route_table_id = aws_route_table.private.id
 }
 
-resource "aws_route_table_association" "private-eu-west-1b" {
-    subnet_id = aws_subnet.private-eu-west-1a.id
+resource "aws_route_table_association" "private-us-east-1b" {
+    subnet_id = aws_subnet.private-us-east-1a.id
     route_table_id = aws_route_table.private.id
 }
 
 
-resource "aws_route_table_association" "public-eu-west-1a" {
-    subnet_id = aws_subnet.public-eu-west-1a.id
+resource "aws_route_table_association" "public-us-east-1a" {
+    subnet_id = aws_subnet.public-us-east-1a.id
     route_table_id = aws_route_table.public.id
 }
 
 
-resource "aws_route_table_association" "public-eu-west-1b" {
-    subnet_id = aws_subnet.public-eu-west-1b.id
+resource "aws_route_table_association" "public-us-east-1b" {
+    subnet_id = aws_subnet.public-us-east-1b.id
     route_table_id = aws_route_table.public.id
 }
 
@@ -216,10 +216,10 @@ resource "aws_eks_cluster" "dev" {
 
     vpc_config {
         subnet_ids = [  //subnets for eks to create nodes & lb
-            aws_subnet.private-eu-west-1a.id,
-            aws_subnet.private-eu-west-1b.id,
-            aws_subnet.public-eu-west-1a.id,
-            aws_subnet.public-eu-west-1b.id
+            aws_subnet.private-us-east-1a.id,
+            aws_subnet.private-us-east-1b.id,
+            aws_subnet.public-us-east-1a.id,
+            aws_subnet.public-us-east-1b.id
         ]
     }
 
@@ -272,8 +272,8 @@ resource "aws_eks_node_group" "private-nodes" {
 
     # define subnets where you want to run your nodes
     subnet_ids = [
-        aws_subnet.private-eu-west-1a.id,
-        aws_subnet.private-eu-west-1b.id
+        aws_subnet.private-us-east-1a.id,
+        aws_subnet.private-us-east-1b.id
     ]
 
     capacity_type = "ON_DEMAND"  //or spot instance cheaper but can go offline
