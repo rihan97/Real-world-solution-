@@ -298,7 +298,7 @@ resource "aws_eks_node_group" "private-nodes" {
         effect = "NO_SCHEDULE"
     }
 
-    depends_on = [  //first create the roles to be created
+    depends_on = [  //first create the roles to be created before this step
         aws_iam_role_policy_attachment.nodes-AmazonEKSWorkerNodePolicy,
         aws_iam_role_policy_attachment.nodes-AmazonEKS_CNI_Policy,
         aws_iam_role_policy_attachment.nodes-AmazonEC2ContainerRegistryReadOnly
