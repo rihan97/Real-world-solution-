@@ -275,7 +275,7 @@ resource "aws_eks_node_group" "private-nodes" {
     ]
 
     capacity_type = "ON_DEMAND"  //or spot instance cheaper but can go offline
-    instance_types = [t2.micro]
+    instance_types = ["t2.micro"]
 
        // eks by itself wont scale ur nodes have to deploy cluster afterscalor and define min max, eks will use this setting to create aws afterscaling group on ur behalf
     scaling_config {  
