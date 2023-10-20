@@ -266,7 +266,7 @@ resource "aws_iam_role_policy_attachment" "nodes-AmazonEC2ContainerRegistryReadO
 resource "aws_eks_node_group" "private-nodes" {
     cluster_name = aws_eks_cluster.dev.name //assoicate instance group with eks cluster
     node_group_name = "private-nodes"
-    node_role_arn = aws_iam_role.node.arn //attach iam role
+    node_role_arn = aws_iam_role.nodes.arn //attach iam role
 
     # define subnets where you want to run your nodes
     subnet_ids = [
