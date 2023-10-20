@@ -281,22 +281,22 @@ resource "aws_eks_node_group" "private-nodes" {
     scaling_config {  
         desired_size = 1
         max_size = 3
-        min_size = 0
+        min_size = 1
     }
 
-    update_config {
-        max_unavailable = 1 // this is the desired max num of unavail. worker nodes during node group updates
-    }
+    # update_config {
+    #     max_unavailable = 1 // this is the desired max num of unavail. worker nodes during node group updates
+    # }
 
     labels = {
         role = "general"
     }
     
-    taint { // i.e node affinity to schedule on particular node group and repel pods
-        key = "team"
-        value = "devops"
-        effect = "NO_SCHEDULE"
-    }
+    # taint { // i.e node affinity to schedule on particular node group and repel pods
+    #     key = "team"
+    #     value = "devops"
+    #     effect = "NO_SCHEDULE"
+    # }
 
     depends_on = [  //first create the roles to be created before this step
         aws_iam_role_policy_attachment.nodes-AmazonEKSWorkerNodePolicy,
@@ -311,13 +311,13 @@ resource "aws_eks_node_group" "private-nodes" {
 
 # create cert for eks
 data "tls_certificate" "eks" {
-    url = aws_eks_cluster.dev.indentity[0].oidc[0].issuer
+    url = aws_eks_cluster.dev.identity[0].oidc[0].issuer
 }
 
 # create openid provider second option - iam roles
 resource "aws_iam_openid_connect_provider" "eks" {
-    client_id_list = ["sts.amazon.com"]
-    thumbprint_list = [data.tls_certificate.eks.certifcates[0].sha1_fingerprint]
+    client_id_list = ["sts.amazonaws.com"]
+    thumbprint_list = [data.tls_certificate.eks.certificates[0].sha1_fingerprint]
     url = aws_eks_cluster.dev.identity[0].oidc[0].issuer
 }
 
@@ -350,7 +350,7 @@ resource "aws_iam_role" "test_oidc" {
 
 
 # now to test the created oidc provider lets give it s3 permission to list buckets
-resource "aws_iam_policy" "test_policy" {
+resource "aws_iam_policy" "test-policy" {
     name = "test-policy"
 
     policy = jsonencode ({
