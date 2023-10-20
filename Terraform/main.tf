@@ -77,7 +77,7 @@ resource "aws_subnet" "public-eu-west-1b" {
 
 # nat gw for private subnets to have access to internet
 resource "aws_eip" "nat" {
-    vpc = true
+    domain = "vpc"
 
     tags = {
         name = "nat"
