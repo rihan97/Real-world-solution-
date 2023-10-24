@@ -1,0 +1,24 @@
+#bind the service account with the role
+---
+apiVersion: v1
+kind: ServiceAccount 
+metadata: 
+  name: aws-user
+  namespace: default
+  eks.amazonaws.com/role-arn: arn:aws:iam::341880147273:role/test-oidc #associate our role with this sa
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: aws-cli
+  namespace: default
+spec:
+  serviceAccountName: aws-test
+  containers:
+  - name: aws-cli
+    image: amazon/aws-cli
+    command: [ "/bin/bash", "-c", "--" ]
+    args: [ "while true; do sleep 30; done;" ] #prevent existing infinite loop
+  tolerations:
+  - operator: Exists
+    effect: NoSchedule
