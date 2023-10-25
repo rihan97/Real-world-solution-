@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-cli
+  namespace: default
+spec:
+  replicas: 3
+  template:
+    spec:
+      serviceAccountName: aws-test # reference to the sa yaml file 
+      containers:
+      - image: <account-id>.dkr.ecr.us-east-1.amazonaws.com/my-python-api-server:latest # using custom python api image from ecr repo
+        name: aws-cli
+      imagePullSecrets:
+        - name: ecr-secret # reference to name of secret yaml file.
