@@ -150,6 +150,11 @@ resource "aws_route_table_association" "public-us-east-1b" {
     route_table_id = aws_route_table.public.id
 }
 
+# create the ecr repo
+
+resource "aws_ecr_repository" "my-python-api-server" {
+    name = "my-python-api-server"  //repo name
+}
 
 
 ##### eks cluster
