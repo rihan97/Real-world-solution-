@@ -1,0 +1,7 @@
+# manifest file information about the helm chart
+apiVersion: v2
+name: my-python-api-server
+description: A Helm chart for deploying My Python API server
+version: 1.0.0
+appVersion: 1.0.0
+
