@@ -1,15 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aws-cli
+  name: python-api-server
   namespace: default
 spec:
   replicas: 3
+  selector: 
+    matchLabels: 
+      app: python
   template:
+    metadata:
+      labels:
+        app: python
     spec:
       serviceAccountName: aws-test # reference to the sa yaml file 
       containers:
       - image: <account-id>.dkr.ecr.us-east-1.amazonaws.com/my-python-api-server:latest # using custom python api image from ecr repo
-        name: aws-cli
+        name: python-api-server
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 30; done;" ]  # infinite loop so the pod doesnt terminate 
+        ports:
+        - name: web
+          containerPort: 80
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 100m
+          limits:
+            memory: 100Mi
+            cpu: 100m
       imagePullSecrets:
         - name: ecr-secret # reference to name of secret yaml file.
