@@ -355,3 +355,19 @@ resource "aws_iam_role_policy_attachment" "test_attach" {
 # output the arn of the created role to the terminal as its needed in the k8s sa - check outptus.tf
 
 
+
+# create eks autoscaler 
+# use previous created OpenID connect provider to create iam role and bind with the auto scaler
+
+data "aws_iam_policy_document" "eks_cluster_autoscaler_assume_role_policy" {
+    statement {
+      actions = ["sts:AssumeRoleWithWebIdentity"]
+      effect = "Allow"
+
+    condition {
+      test = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
+      values = ["system:"]
+    }
+    }
+}
