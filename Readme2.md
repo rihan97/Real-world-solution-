@@ -10,6 +10,9 @@
 #### Push the docker image to ECR repo 
 ```docker push <account-id>.dkr.ecr.us-east-1.amazonaws.com/my-python-api-server:latest```
 
+#### Deploy IaC infra into AWS
+```terraform apply --auto-approve```
+
 #### Generate base64-encoded docker configuration data which is needed in the secret.yaml file
 ```
 kubectl create secret docker-registry my-ecr-secret \
