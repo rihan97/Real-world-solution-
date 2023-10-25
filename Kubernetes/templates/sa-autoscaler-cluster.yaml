@@ -1,0 +1,9 @@
+# creating the sa in the kube-system ns - as our role is created in that namespace check main tf 
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cluster-autoscaler
+  namespace: kube-system
+  annotations: 
+    eks.amazon.com/role-arn: arn:aws:::role/eks-cluster-autoscaler
+    
