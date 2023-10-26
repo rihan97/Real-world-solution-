@@ -1,0 +1,17 @@
+
+# exposing my-python-api-server to internet
+apiVersion: v1
+kind: Service
+metadata:
+  name: private-lb
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb 
+    service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0 # addi anno needed for internal lb this is for my services within vpc.
+spec:
+  type: LoadBalancer
+  selector:
+    app: python
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: web
